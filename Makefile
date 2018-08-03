@@ -1,6 +1,5 @@
 REPO := $(shell dirname $(realpath $(lastword $(MAKEFILE_LIST))))
 
-
 BUILD_DIR=$(REPO)/build
 
 EXE = $(REPO)/lokinet
@@ -49,14 +48,14 @@ build: ensure sodium
 
 static-sodium-configure: ensure
 	cd $(SODIUM_SRC) && $(SODIUM_SRC)/autogen.sh
-	cd $(SODIUM_BUILD) && CC=ecc CXX=ecc++ $(SODIUM_CONFIG) --prefix=$(DEP_PREFIX) --enable-static --disable-shared
+	cd $(SODIUM_BUILD) && $(SODIUM_CONFIG) --prefix=$(DEP_PREFIX) --enable-static --disable-shared
 
 static-sodium: static-sodium-configure
 	$(MAKE) -C $(SODIUM_BUILD) clean
-	$(MAKE) -C $(SODIUM_BUILD) install CFLAGS=-fPIC CC=ecc CXX=ecc++
+	$(MAKE) -C $(SODIUM_BUILD) install CFLAGS=-fPIC
 
 static: static-sodium
-	cd $(BUILD_DIR) && cmake $(LLARPD_SRC) -DSODIUM_LIBRARIES=$(SODIUM_LIB) -DSODIUM_INCLUDE_DIR=$(DEP_PREFIX)/include -DSTATIC_LINK=ON -DCMAKE_C_COMPILER=ecc -DCMAKE_CXX_COMPILER=ecc++
+	cd $(BUILD_DIR) && cmake $(LLARPD_SRC) -DSODIUM_LIBRARIES=$(SODIUM_LIB) -DSODIUM_INCLUDE_DIR=$(DEP_PREFIX)/include -DSTATIC_LINK=ON 
 	$(MAKE) -C $(BUILD_DIR)
 	cp $(BUILD_DIR)/llarpd $(EXE)
 
@@ -85,7 +84,6 @@ windows-sodium: ensure
 	cd $(SODIUM_BUILD) && $(SODIUM_CONFIG) --prefix=$(DEP_PREFIX) --enable-static --disable-shared --host=x86_64-w64-mingw32
 	$(MAKE) -C $(SODIUM_BUILD) install
 
-
 windows: windows-sodium
 	cd $(BUILD_DIR) && cmake $(LLARPD_SRC) -DSTATIC_LINK=ON -DSODIUM_LIBRARIES=$(SODIUM_LIB) -DSODIUM_INCLUDE_DIR=$(DEP_PREFIX)/include -DCMAKE_TOOLCHAIN_FILE=$(MINGW_TOOLCHAIN) -DHAVE_CXX17_FILESYSTEM=ON
 	$(MAKE) -C $(BUILD_DIR)
@@ -95,7 +93,7 @@ motto:
 	figlet "$(shell cat $(MOTTO))"
 
 release: static-sodium motto
-	cd $(BUILD_DIR) && cmake $(LLARPD_SRC) -DSODIUM_LIBRARIES=$(SODIUM_LIB) -DSODIUM_INCLUDE_DIR=$(DEP_PREFIX)/include -DSTATIC_LINK=ON -DCMAKE_C_COMPILER=ecc -DCMAKE_CXX_COMPILER=ecc++ -DCMAKE_BUILD_TYPE=Release -DRELEASE_MOTTO="$(shell cat $(MOTTO))"
+	cd $(BUILD_DIR) && cmake $(LLARPD_SRC) -DSODIUM_LIBRARIES=$(SODIUM_LIB) -DSODIUM_INCLUDE_DIR=$(DEP_PREFIX)/include -DSTATIC_LINK=ON -DCMAKE_BUILD_TYPE=Release -DRELEASE_MOTTO="$(shell cat $(MOTTO))"
 	$(MAKE) -C $(BUILD_DIR)
 	cp $(BUILD_DIR)/llarpd $(EXE)
 	#gpg --sign --detach $(EXE)
