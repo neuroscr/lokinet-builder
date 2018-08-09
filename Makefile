@@ -51,7 +51,7 @@ sodium: sodium-configure
 	$(MAKE) -C $(SODIUM_BUILD) install CFLAGS=-fPIC
 
 build: ensure sodium
-	cd $(BUILD_DIR) && cmake $(LLARPD_SRC) -DSODIUM_LIBRARIES=$(SODIUM_LIB) -DSODIUM_INCLUDE_DIR=$(DEP_PREFIX)/include -G "Unix Makefiles"
+	cd $(BUILD_DIR) && cmake $(LLARPD_SRC) -DSODIUM_LIBRARIES=$(SODIUM_LIB) -DSODIUM_INCLUDE_DIR=$(DEP_PREFIX)/include -G "Unix Makefiles" -DTUNTAP=ON 
 	$(MAKE) -C $(BUILD_DIR)
 	cp $(BUILD_DIR)/llarpd $(EXE)
 
@@ -110,10 +110,12 @@ android-arm-mk-prepare:
 	echo "LOCAL_EXPORT_C_INCLUDES := $(LLARPD_SRC)/include" >> $(ANDROID_MK)
 	echo 'include $$(PREBUILT_STATIC_LIBRARY)' >> $(ANDROID_MK)
 
-
-
-
 android: android-gradle
+
+debian: ensure sodium
+	cd $(BUILD_DIR) && cmake $(LLARPD_SRC) -DSODIUM_LIBRARIES=$(SODIUM_LIB) -DSODIUM_INCLUDE_DIR=$(DEP_PREFIX)/include -G "Unix Makefiles" -DDEBIAN=ON -DTUNTAP=ON
+	$(MAKE) -C $(BUILD_DIR)
+	cp $(BUILD_DIR)/llarpd $(EXE)
 
 cross-sodium: ensure
 	cd $(SODIUM_SRC) && $(SODIUM_SRC)/autogen.sh
@@ -121,7 +123,7 @@ cross-sodium: ensure
 	$(MAKE) -C $(SODIUM_BUILD) install
 
 cross: cross-sodium
-	cd $(BUILD_DIR) && cmake $(LLARPD_SRC) -DSTATIC_LINK=ON -DSODIUM_LIBRARIES=$(SODIUM_LIB) -DSODIUM_INCLUDE_DIR=$(DEP_PREFIX)/include -DCMAKE_C_COMPILER=$(CROSS_CC) -DCMAKE_CXX_COMPILER=$(CROSS_CXX) -DCMAKE_CROSS_COMPILING=ON
+	cd $(BUILD_DIR) && cmake $(LLARPD_SRC) -DSTATIC_LINK=ON -DSODIUM_LIBRARIES=$(SODIUM_LIB) -DSODIUM_INCLUDE_DIR=$(DEP_PREFIX)/include -DCMAKE_C_COMPILER=$(CROSS_CC) -DCMAKE_CXX_COMPILER=$(CROSS_CXX) -DCMAKE_CROSS_COMPILING=ON -DTUNTAP=ON
 	$(MAKE) -C $(BUILD_DIR)
 	cp $(BUILD_DIR)/llarpd $(EXE)
 
@@ -131,7 +133,7 @@ windows-sodium: ensure
 	$(MAKE) -C $(SODIUM_BUILD) install
 
 windows: windows-sodium
-	cd $(BUILD_DIR) && cmake $(LLARPD_SRC) -DSTATIC_LINK=ON -DSODIUM_LIBRARIES=$(SODIUM_LIB) -DSODIUM_INCLUDE_DIR=$(DEP_PREFIX)/include -DCMAKE_TOOLCHAIN_FILE=$(MINGW_TOOLCHAIN) -DHAVE_CXX17_FILESYSTEM=ON
+	cd $(BUILD_DIR) && cmake $(LLARPD_SRC) -DSTATIC_LINK=ON -DSODIUM_LIBRARIES=$(SODIUM_LIB) -DSODIUM_INCLUDE_DIR=$(DEP_PREFIX)/include -DCMAKE_TOOLCHAIN_FILE=$(MINGW_TOOLCHAIN) -DHAVE_CXX17_FILESYSTEM=ON -DTUNTAP=ON
 	$(MAKE) -C $(BUILD_DIR)
 	cp $(BUILD_DIR)/llarpd.exe $(EXE).exe
 
@@ -139,7 +141,7 @@ motto:
 	figlet "$(shell cat $(MOTTO))"
 
 release: static-sodium motto
-	cd $(BUILD_DIR) && cmake $(LLARPD_SRC) -DSODIUM_LIBRARIES=$(SODIUM_LIB) -DSODIUM_INCLUDE_DIR=$(DEP_PREFIX)/include -DSTATIC_LINK=ON -DCMAKE_BUILD_TYPE=Release -DRELEASE_MOTTO="$(shell cat $(MOTTO))"
+	cd $(BUILD_DIR) && cmake $(LLARPD_SRC) -DSODIUM_LIBRARIES=$(SODIUM_LIB) -DSODIUM_INCLUDE_DIR=$(DEP_PREFIX)/include -DSTATIC_LINK=ON -DCMAKE_BUILD_TYPE=Release -DRELEASE_MOTTO="$(shell cat $(MOTTO))" -DTUNTAP=ON
 	$(MAKE) -C $(BUILD_DIR)
 	cp $(BUILD_DIR)/llarpd $(EXE)
 	#gpg --sign --detach $(EXE)
