@@ -53,7 +53,7 @@ sodium: sodium-configure
 build: ensure sodium
 	cd $(BUILD_DIR) && cmake $(LLARPD_SRC) -DSODIUM_LIBRARIES=$(SODIUM_LIB) -DSODIUM_INCLUDE_DIR=$(DEP_PREFIX)/include -G "Unix Makefiles" -DTUNTAP=ON 
 	$(MAKE) -C $(BUILD_DIR)
-	cp $(BUILD_DIR)/llarpd $(EXE)
+	cp $(BUILD_DIR)/lokinet $(EXE)
 
 static-sodium-configure: ensure
 	cd $(SODIUM_SRC) && $(SODIUM_SRC)/autogen.sh
@@ -66,7 +66,7 @@ static-sodium: static-sodium-configure
 static: static-sodium
 	cd $(BUILD_DIR) && cmake $(LLARPD_SRC) -DSODIUM_LIBRARIES=$(SODIUM_LIB) -DSODIUM_INCLUDE_DIR=$(DEP_PREFIX)/include -DSTATIC_LINK=ON 
 	$(MAKE) -C $(BUILD_DIR)
-	cp $(BUILD_DIR)/llarpd $(EXE)
+	cp $(BUILD_DIR)/lokinet $(EXE)
 
 android-sodium: ensure
 	cd $(SODIUM_SRC) && $(SODIUM_SRC)/autogen.sh && LIBSODIUM_FULL_BUILD=1 ANDROID_NDK_HOME=$(NDK) $(SODIUM_SRC)/dist-build/android-x86.sh
@@ -115,7 +115,7 @@ android: android-gradle
 debian: ensure sodium
 	cd $(BUILD_DIR) && cmake $(LLARPD_SRC) -DSODIUM_LIBRARIES=$(SODIUM_LIB) -DSODIUM_INCLUDE_DIR=$(DEP_PREFIX)/include -G "Unix Makefiles" -DDEBIAN=ON -DTUNTAP=ON
 	$(MAKE) -C $(BUILD_DIR)
-	cp $(BUILD_DIR)/llarpd $(EXE)
+	cp $(BUILD_DIR)/lokinet $(EXE)
 
 cross-sodium: ensure
 	cd $(SODIUM_SRC) && $(SODIUM_SRC)/autogen.sh
@@ -125,7 +125,7 @@ cross-sodium: ensure
 cross: cross-sodium
 	cd $(BUILD_DIR) && cmake $(LLARPD_SRC) -DSTATIC_LINK=ON -DSODIUM_LIBRARIES=$(SODIUM_LIB) -DSODIUM_INCLUDE_DIR=$(DEP_PREFIX)/include -DCMAKE_C_COMPILER=$(CROSS_CC) -DCMAKE_CXX_COMPILER=$(CROSS_CXX) -DCMAKE_CROSS_COMPILING=ON -DTUNTAP=ON
 	$(MAKE) -C $(BUILD_DIR)
-	cp $(BUILD_DIR)/llarpd $(EXE)
+	cp $(BUILD_DIR)/lokinet $(EXE)
 
 windows-sodium: ensure
 	cd $(SODIUM_SRC) && $(SODIUM_SRC)/autogen.sh
@@ -135,7 +135,7 @@ windows-sodium: ensure
 windows: windows-sodium
 	cd $(BUILD_DIR) && cmake $(LLARPD_SRC) -DSTATIC_LINK=ON -DSODIUM_LIBRARIES=$(SODIUM_LIB) -DSODIUM_INCLUDE_DIR=$(DEP_PREFIX)/include -DCMAKE_TOOLCHAIN_FILE=$(MINGW_TOOLCHAIN) -DHAVE_CXX17_FILESYSTEM=ON -DTUNTAP=OFF
 	$(MAKE) -C $(BUILD_DIR)
-	cp $(BUILD_DIR)/llarpd.exe $(EXE).exe
+	cp $(BUILD_DIR)/lokinet.exe $(EXE).exe
 
 motto:
 	figlet "$(shell cat $(MOTTO))"
@@ -143,8 +143,8 @@ motto:
 release: static-sodium motto
 	cd $(BUILD_DIR) && cmake $(LLARPD_SRC) -DSODIUM_LIBRARIES=$(SODIUM_LIB) -DSODIUM_INCLUDE_DIR=$(DEP_PREFIX)/include -DSTATIC_LINK=ON -DCMAKE_BUILD_TYPE=Release -DRELEASE_MOTTO="$(shell cat $(MOTTO))" -DTUNTAP=ON
 	$(MAKE) -C $(BUILD_DIR)
-	cp $(BUILD_DIR)/llarpd $(EXE)
-	#gpg --sign --detach $(EXE)
+	cp $(BUILD_DIR)/lokinet $(EXE)
+	gpg --sign --detach $(EXE)
 
 clean:
 	rm -rf $(BUILD_DIR) $(EXE)
