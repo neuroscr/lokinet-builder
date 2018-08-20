@@ -113,7 +113,7 @@ android-arm-mk-prepare:
 android: android-gradle
 
 debian: ensure sodium
-	cd $(BUILD_DIR) && cmake $(LLARPD_SRC) -DSODIUM_LIBRARIES=$(SODIUM_LIB) -DSODIUM_INCLUDE_DIR=$(DEP_PREFIX)/include -G "Unix Makefiles" -DDEBIAN=ON -DTUNTAP=ON
+	cd $(BUILD_DIR) && cmake $(LLARPD_SRC) -DSODIUM_LIBRARIES=$(SODIUM_LIB) -DSODIUM_INCLUDE_DIR=$(DEP_PREFIX)/include -G "Unix Makefiles" -DDEBIAN=ON -DTUNTAP=ON -DRELEASE_MOTTO="$(shell cat $(LLARPD_SRC)/motto.txt)"
 	$(MAKE) -C $(BUILD_DIR)
 	cp $(BUILD_DIR)/lokinet $(EXE)
 
