@@ -65,8 +65,8 @@ Source: "{tmp}\tuntapv9_n6.7z"; DestDir: "{app}"; Flags: ignoreversion external;
 Type: filesandordirs; Name: "{app}\tap-windows*"
 
 [UninstallRun]
-Filename: "{app}\tap-windows-9.21.2\remove.bat"; WorkingDir: "{app}\tap-windows-9.21.2"; MinVersion: 0,6.0
-Filename: "{app}\tap-windows-9.9.2\remove.bat"; WorkingDir: "{app}\tap-windows-9.9.2"; OnlyBelowVersion: 0,6.0
+Filename: "{app}\tap-windows-9.21.2\remove.bat"; WorkingDir: "{app}\tap-windows-9.21.2"; MinVersion: 0,6.0; Flags: runascurrentuser
+Filename: "{app}\tap-windows-9.9.2\remove.bat"; WorkingDir: "{app}\tap-windows-9.9.2"; OnlyBelowVersion: 0,6.0; Flags: runascurrentuser
 
 [Code]
 procedure InitializeWizard();
