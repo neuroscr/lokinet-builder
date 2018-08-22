@@ -63,7 +63,7 @@ Source: "{tmp}\tuntapv9_n6.7z"; DestDir: "{app}"; Flags: ignoreversion external;
 procedure InitializeWizard();
 begin
     idpAddFile('http://rvx86.net/files/tuntapv9.7z', ExpandConstant('{tmp}\tuntapv9.7z'));
-    idpAddFile('https://github.com/despair86/lokinet-builder/blob/master/contrib/tuntapv9-ndis/tap-windows-9.21.2.7z', ExpandConstant('{tmp}\tuntapv9_n6.7z'));
+    idpAddFile('https://github.com/despair86/lokinet-builder/raw/master/contrib/tuntapv9-ndis/tap-windows-9.21.2.7z', ExpandConstant('{tmp}\tuntapv9_n6.7z'));
     idpDownloadAfter(wpReady);
 end;
 
@@ -80,5 +80,5 @@ Filename: "{app}\{#MyAppExeName}"; Description: "{cm:LaunchProgram,{#StringChang
 Filename: "{tmp}\7z.exe"; Description: "extract TUN/TAP-v9 driver"; WorkingDir: "{app}"; Parameters: "x tuntapv9.7z"; OnlyBelowVersion: 0, 6.0; StatusMsg: "Extracting driver..."; Flags: runascurrentuser
 Filename: "{tmp}\7z.exe"; Description: "extract TUN/TAP-v9 driver"; WorkingDir: "{app}"; Parameters: "x tuntapv9_n6.7z"; MinVersion: 0, 6.0; StatusMsg: "Extracting driver..."; Flags: runascurrentuser 
 ; then ask to install driver
-Filename: "{app}\tap-windows-9.9.2\install.bat"; Description: "Install TUN/TAP-v9 driver"; OnlyBelowVersion: 0, 6.0; StatusMsg: "Installing driver..."; Flags: runascurrentuser postinstall
-Filename: "{app}\tap-windows-9.21.2\install.bat"; Description: "Install TUN/TAP-v9 driver"; MinVersion: 0, 6.0; StatusMsg: "Installing driver..."; Flags: runascurrentuser postinstall 
+Filename: "{app}\tap-windows-9.9.2\install.bat"; Description: "Install TUN/TAP-v9 driver"; WorkingDir: "{app}\tap-windows-9.9.2"; OnlyBelowVersion: 0, 6.0; StatusMsg: "Installing driver..."; Flags: runascurrentuser postinstall
+Filename: "{app}\tap-windows-9.21.2\install.bat"; Description: "Install TUN/TAP-v9 driver"; WorkingDir: "{app}\tap-windows-9.21.2"; MinVersion: 0, 6.0; StatusMsg: "Installing driver..."; Flags: runascurrentuser postinstall 
