@@ -6,6 +6,8 @@
 #define MyAppPublisher "Loki Project"
 #define MyAppURL "https://loki.project"
 #define MyAppExeName "lokinet.exe"
+; change this to avoid compiler errors  -despair
+#define DevPath "D:\dev\llarpd-builder\"
 #include <idp.iss>
 
 ; inno setup script ©2018 rick v for loki project
@@ -29,8 +31,8 @@ AppUpdatesURL={#MyAppURL}
 DefaultDirName={pf}\{#MyAppName}
 DefaultGroupName={#MyAppName}
 AllowNoIcons=yes
-LicenseFile=D:\dev\llarpd-builder\deps\llarp\LICENSE
-OutputDir=D:\dev\llarpd-builder\win32-setup
+LicenseFile={#DevPath}deps\llarp\LICENSE
+OutputDir={#DevPath}win32-setup
 OutputBaseFilename=lokinet-win32
 Compression=lzma
 SolidCompression=yes
@@ -43,16 +45,16 @@ Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{
 Name: "quicklaunchicon"; Description: "{cm:CreateQuickLaunchIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked; OnlyBelowVersion: 0,6.1
 
 [Files]
-Source: "D:\dev\llarpd-builder\build\lokinet.exe"; DestDir: "{app}"; Flags: ignoreversion
-Source: "D:\dev\llarpd-builder\daemon.ini"; DestDir: "{app}"; Flags: ignoreversion
-Source: "D:\dev\llarpd-builder\build\dns.exe"; DestDir: "{app}"; Flags: ignoreversion
-Source: "D:\dev\llarpd-builder\build\libgcc_s_sjlj-1.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "D:\dev\llarpd-builder\build\libstdc++-6.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "D:\dev\llarpd-builder\build\libwinpthread-1.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "D:\dev\llarpd-builder\build\llarpc.exe"; DestDir: "{app}"; Flags: ignoreversion
-Source: "D:\dev\llarpd-builder\build\rcutil.exe"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#DevPath}build\lokinet.exe"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#DevPath}daemon.ini"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#DevPath}build\dns.exe"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#DevPath}build\libgcc_s_sjlj-1.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#DevPath}build\libstdc++-6.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#DevPath}build\libwinpthread-1.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#DevPath}build\llarpc.exe"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#DevPath}build\rcutil.exe"; DestDir: "{app}"; Flags: ignoreversion
 ; delet this after finishing setup, we only need it to extract the drivers
-Source: "D:\dev\llarpd-builder\win32-setup\7z.exe"; DestDir: "{tmp}"; Flags: deleteafterinstall
+Source: "{#DevPath}win32-setup\7z.exe"; DestDir: "{tmp}"; Flags: deleteafterinstall
 ; Copy the correct tuntap driver for the selected platform
 Source: "{tmp}\tuntapv9.7z"; DestDir: "{app}"; Flags: ignoreversion external; OnlyBelowVersion: 0, 6.0
 Source: "{tmp}\tuntapv9_n6.7z"; DestDir: "{app}"; Flags: ignoreversion external; MinVersion: 0,6.0
@@ -61,6 +63,10 @@ Source: "{tmp}\tuntapv9_n6.7z"; DestDir: "{app}"; Flags: ignoreversion external;
 
 [UninstallDelete]
 Type: filesandordirs; Name: "{app}\tap-windows*"
+
+[UninstallRun]
+Filename: "{app}\tap-windows-9.21.2\remove.bat"; WorkingDir: "{app}\tap-windows-9.21.2"; MinVersion: 0,6.0
+Filename: "{app}\tap-windows-9.9.2\remove.bat"; WorkingDir: "{app}\tap-windows-9.9.2"; OnlyBelowVersion: 0,6.0
 
 [Code]
 procedure InitializeWizard();
