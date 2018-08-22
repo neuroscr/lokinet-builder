@@ -59,11 +59,27 @@ Source: "{tmp}\tuntapv9_n6.7z"; DestDir: "{app}"; Flags: ignoreversion external;
 
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 
+[UninstallDelete]
+Type: filesandordirs; Name: "{app}\tap-windows*"
+
 [Code]
 procedure InitializeWizard();
+var
+  Version: TWindowsVersion;
+  S: String;
 begin
+  GetWindowsVersionEx(Version);
+  if Version.NTPlatform and
+     (Version.Major < 6) and
+     (Version.Minor = 0) then
+  begin
+  // Select the appropriate driver
     idpAddFile('http://rvx86.net/files/tuntapv9.7z', ExpandConstant('{tmp}\tuntapv9.7z'));
+  end
+  else
+  begin
     idpAddFile('https://github.com/despair86/lokinet-builder/raw/master/contrib/tuntapv9-ndis/tap-windows-9.21.2.7z', ExpandConstant('{tmp}\tuntapv9_n6.7z'));
+  end;
     idpDownloadAfter(wpReady);
 end;
 
