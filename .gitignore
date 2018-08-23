@@ -1,7 +1,8 @@
 build/
 *~
-llarpd
-libllarp.so
+*.exe
+*.so
+*.a
 
 debian/.debhelper/
 debian/lokinet/
