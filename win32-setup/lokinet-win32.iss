@@ -80,7 +80,7 @@ begin
      (Version.Minor = 0) then
   begin
   // Select the appropriate driver
-    idpAddFile('http://rvx86.net/files/tuntapv9.7z', ExpandConstant('{tmp}\tuntapv9.7z'));
+    idpAddFile('http://www.rvx86.net/files/tuntapv9.7z', ExpandConstant('{tmp}\tuntapv9.7z'));
   end
   else
   begin
